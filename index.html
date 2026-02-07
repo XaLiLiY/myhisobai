@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aqlli moliyaviy yordamchi - MyHisob AI">
+    <meta name="theme-color" content="#6366f1">
+    <title>MyHisob AI - Moliyaviy Yordamchi</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen">
+        <div class="auth-container">
+            <div class="logo-section">
+                <div class="logo-icon">💰</div>
+                <h1 class="logo-text">MyHisob AI</h1>
+                <p class="logo-subtitle">Pulingizni nazorat qiling — hayotingizni o'zgartiring</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="showAuthTab('login')">Kirish</button>
+                <button class="auth-tab" onclick="showAuthTab('register')">Ro'yxatdan o'tish</button>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Parol</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Kirish</button>
+            </form>
+
+            <form id="registerForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label>To'liq ism</label>
+                    <input type="text" id="registerFullName">
+                </div>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="registerUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Parol</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Ro'yxatdan o'tish</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="appScreen" class="screen" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>MyHisob AI</h1>
+                <button class="btn-icon" onclick="logout()">
+                    <span>🚪</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="showPage('dashboard')">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Asosiy</span>
+            </button>
+            <button class="nav-item" onclick="showPage('income')">
+                <span class="nav-icon">💵</span>
+                <span class="nav-label">Daromad</span>
+            </button>
+            <button class="nav-item" onclick="showPage('expense')">
+                <span class="nav-icon">💸</span>
+                <span class="nav-label">Xarajat</span>
+            </button>
+            <button class="nav-item" onclick="showPage('debts')">
+                <span class="nav-icon">🤝</span>
+                <span class="nav-label">Qarzlar</span>
+            </button>
+            <button class="nav-item" onclick="showPage('ai')">
+                <span class="nav-icon">🤖</span>
+                <span class="nav-label">AI Tahlil</span>
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <div class="stats-grid">
+                    <div class="stat-card balance">
+                        <div class="stat-label">Balans</div>
+                        <div class="stat-value" id="balanceValue">0 so'm</div>
+                        <div class="stat-trend positive">↗ Yaxshi</div>
+                    </div>
+                    <div class="stat-card income">
+                        <div class="stat-label">Daromad</div>
+                        <div class="stat-value" id="totalIncomeValue">0 so'm</div>
+                    </div>
+                    <div class="stat-card expense">
+                        <div class="stat-label">Xarajat</div>
+                        <div class="stat-value" id="totalExpenseValue">0 so'm</div>
+                    </div>
+                    <div class="stat-card debt-given">
+                        <div class="stat-label">Berilgan qarz</div>
+                        <div class="stat-value" id="debtsGivenValue">0 so'm</div>
+                    </div>
+                    <div class="stat-card debt-taken">
+                        <div class="stat-label">Olingan qarz</div>
+                        <div class="stat-value" id="debtsTakenValue">0 so'm</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Tezkor amallar</h2>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="showAddModal('income')">
+                            <span class="action-icon">💵</span>
+                            <span>Daromad qo'shish</span>
+                        </button>
+                        <button class="quick-action-btn" onclick="showAddModal('expense')">
+                            <span class="action-icon">💸</span>
+                            <span>Xarajat qo'shish</span>
+                        </button>
+                        <button class="quick-action-btn" onclick="showAddModal('debt')">
+                            <span class="action-icon">🤝</span>
+                            <span>Qarz qo'shish</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Income Page -->
+            <div id="incomePage" class="page">
+                <div class="page-header">
+                    <h2>Daromadlar</h2>
+                    <button class="btn btn-primary" onclick="showAddModal('income')">+ Qo'shish</button>
+                </div>
+                <div id="incomeList" class="transaction-list"></div>
+            </div>
+
+            <!-- Expense Page -->
+            <div id="expensePage" class="page">
+                <div class="page-header">
+                    <h2>Xarajatlar</h2>
+                    <button class="btn btn-primary" onclick="showAddModal('expense')">+ Qo'shish</button>
+                </div>
+                <div id="expenseList" class="transaction-list"></div>
+            </div>
+
+            <!-- Debts Page -->
+            <div id="debtsPage" class="page">
+                <div class="page-header">
+                    <h2>Qarzlar</h2>
+                    <button class="btn btn-primary" onclick="showAddModal('debt')">+ Qo'shish</button>
+                </div>
+                
+                <div class="debt-tabs">
+                    <button class="debt-tab active" onclick="filterDebts('all')">Barchasi</button>
+                    <button class="debt-tab" onclick="filterDebts('given')">Berilgan</button>
+                    <button class="debt-tab" onclick="filterDebts('taken')">Olingan</button>
+                </div>
+
+                <div id="debtsList" class="debts-list"></div>
+            </div>
+
+            <!-- AI Analysis Page -->
+            <div id="aiPage" class="page">
+                <div class="page-header">
+                    <h2>🤖 AI Tahlil va Maslahatlar</h2>
+                </div>
+                
+                <div id="aiInsights" class="ai-insights"></div>
+                <div id="aiRecommendations" class="ai-recommendations"></div>
+                <div id="aiAlerts" class="ai-alerts"></div>
+            </div>
+        </main>
+
+        <!-- Add Modal -->
+        <div id="addModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Qo'shish</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <form id="addForm" class="modal-form">
+                    <div id="modalFields"></div>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Debt Payment Modal -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>To'lov qo'shish</h3>
+                    <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+                </div>
+                <form id="paymentForm" class="modal-form">
+                    <input type="hidden" id="paymentDebtId">
+                    <div class="form-group">
+                        <label>To'lov miqdori (so'm)</label>
+                        <input type="number" id="paymentAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label>To'lov sanasi</label>
+                        <input type="date" id="paymentDate" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">To'lovni saqlash</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
